@@ -4,3 +4,5 @@ services:
   app:
     build: app
     command: [ "python", "app.py" ]
+    ports:
+      - 8080
