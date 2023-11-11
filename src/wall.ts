@@ -4,11 +4,11 @@ export {wall}
 
 class wall extends immovable_object
 {
-    constructor(length : number, height : number, thickness : number)
+    constructor(scene : THREE.Scene, length : number, height : number, thickness : number)
     {
-        const geometry = new THREE.BoxGeometry( length + 2*thickness, thickness, height + 2*thickness); 
-        const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} ); 
+        const geometry = new THREE.BoxGeometry( length, height , thickness); 
+        const material = new THREE.MeshPhongMaterial( {color: 0x00ff00} ); 
         const box = new THREE.Mesh( geometry, material ); 
-        super(box);        
+        super(scene, box);        
     }
 }

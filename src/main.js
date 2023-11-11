@@ -2,10 +2,17 @@ import * as THREE from 'three';
 import WebGL from 'three/addons/capabilities/WebGL.js';
 import { STLLoader } from 'three/addons/loaders/STLLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { room_box } from './room'
 
-import { sceneObject } from './sceneObject.ts';
 
 const scene = new THREE.Scene();
+
+let room = new room_box(scene, 10, 10 ,5);
+
+
+
+
+
 const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(-10, 10, -10);
 
@@ -17,6 +24,7 @@ const controls = new OrbitControls(camera, canvas);
 controls.target.set(0, 5, 0);
 controls.update();
 
+
 const loader = new STLLoader();
 
 loader.load("./models/fox.stl", function (geometry) { // #todo MOVE MODELS OUT OF SRC!
@@ -27,11 +35,22 @@ loader.load("./models/fox.stl", function (geometry) { // #todo MOVE MODELS OUT O
 
     mesh.position.set(0, 0, 0);
     mesh.rotation.set(- Math.PI / 2, 0, 0);
-    mesh.scale.set(0.1, 0.1, 0.1);
+    mesh.scale.set(0.01, 0.01, 0.01);
 
     scene.add(mesh);
 
 });
+
+
+class STLObject
+{
+    constructor(name)
+    {
+
+    }
+}
+
+
 
 //ambient light
 const light = new THREE.AmbientLight(0x404040); // soft white light
