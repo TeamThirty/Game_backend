@@ -5,4 +5,8 @@ services:
     build: app
     command: [ "python", "app.py" ]
     ports:
-      - 8080
+      - 8080:8080
+    volumes:
+      - app:/src
+    environment:
+      - FLASK_ENV=development
