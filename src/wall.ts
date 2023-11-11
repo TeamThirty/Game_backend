@@ -6,7 +6,7 @@ class wall extends immovable_object
 {
     constructor(length : number, height : number, thickness : number)
     {
-        const geometry = new THREE.BoxGeometry( length, thickness, height ); 
+        const geometry = new THREE.BoxGeometry( length + 2*thickness, thickness, height + 2*thickness); 
         const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} ); 
         const box = new THREE.Mesh( geometry, material ); 
         super(box);        
