@@ -19,7 +19,7 @@ controls.update();
 
 const loader = new STLLoader();
 
-loader.load("./models/fox.stl", function (geometry) {
+loader.load("./models/fox.stl", function (geometry) { // #todo MOVE MODELS OUT OF SRC!
 
     console.log("tik")
     const material = new THREE.MeshPhongMaterial({ color: 0xf25f78 });
