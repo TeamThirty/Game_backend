@@ -1,20 +1,16 @@
+from init import *
+from resourses import UserResource, ProjectResource, LoginResource
 
-from config import Config
 
-from flask_httpauth import HTTPBasicAuth
-from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
-from flask_restful import Api
-from resourses import UserResource
+def initialize_db():
+    with app.app_context():
+        db.create_all()
 
-app = Flask(__name__)
-app.config = Config
 
-db = SQLAlchemy(app)
-api = Api(app)
-
-api.add_resource(UserResource, '/user/<int:user_id>', '/user')
+api.add_resource(ProjectResource, '/projects', '/projects/<int:projectId>')
+api.add_resource(UserResource, '/users')
+api.add_resource(LoginResource, '/login')
 
 if __name__ == '__main__':
-    db.create_all()
-    app.run(debug=True)
+    initialize_db()
+    app.run(host='0.0.0.0', port=5000, debug=True)

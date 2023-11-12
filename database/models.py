@@ -1,4 +1,4 @@
-from app import db
+from init import db
 from datetime import datetime
 
 
@@ -11,9 +11,10 @@ class User(db.Model):
 
 class Project(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    preview = db.Column(db.Integer, nullable=False)
+    name = db.Column(db.String(255), default='Unnamed')
+    preview = db.Column(db.Integer)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    scene_data = db.Column(db.JSONB, nullable=False)
+    scene_data = db.Column(db.JSON, nullable=False)
     creation_date = db.Column(db.DateTime, default=datetime.utcnow)
 
 
