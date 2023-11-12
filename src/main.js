@@ -9,14 +9,29 @@ import { gltfLoader } from './gltfLoader.js';
 
 const scene = new THREE.Scene();
 
-const stl_loader = new stlLoader();
 const gltf_Loader = new gltfLoader();
+
+const texture_loader = new THREE.TextureLoader()
+
+
+const wall_texture = texture_loader.load("./textures/wall.jpg");
+wall_texture.wrapS = THREE.RepeatWrapping;
+wall_texture.wrapT = THREE.RepeatWrapping;
+wall_texture.repeat.set( 2, 1 );
+
+const floor_texture = texture_loader.load("./textures/floor.jpg");
+
+floor_texture.wrapS = THREE.RepeatWrapping;
+floor_texture.wrapT = THREE.RepeatWrapping;
+floor_texture.repeat.set( 2, 2 );
+
+
 
 let room_materials = 
 {
-    wall : new THREE.MeshPhongMaterial({color: 0xff00ff}),
-    floor : new THREE.MeshPhongMaterial({color: 0x0000ff}),
-    ceiling : new THREE.MeshPhongMaterial({color: 0xff0000})
+    wall : new THREE.MeshPhongMaterial({map : wall_texture}),
+    floor : new THREE.MeshPhongMaterial({map : floor_texture}),
+    ceiling : new THREE.MeshPhongMaterial({color: 0xffffff})
 };
 
 let room = new room_box(scene, 15, 20 ,10, 1, room_materials);
@@ -36,9 +51,6 @@ camera.position.set(10, 10, 10);
 let  cursor = new THREE.Mesh(new THREE.SphereGeometry(0.5, 20, 20), new THREE.MeshBasicMaterial( {color : 0xffffff}))
 scene.add(cursor)
 camera.layers.enableAll()
-
-//THREE.TextureLoader()
-
 
 function init()
 {
@@ -123,12 +135,10 @@ window.addEventListener('resize', () => { resize() });
 
 function onWindowResize() 
 {
-
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
     renderer.setSize( window.innerWidth, window.innerHeight );
-
 }
 
 let currently_holding = false;
@@ -142,14 +152,14 @@ let INTERSECTED_WALL;
 raycaster_objects = new THREE.Raycaster();
 raycaster_walls = new THREE.Raycaster();
 
-var params = {color: "#1861b3" };
-var gui = new GUI();
+let params = {color: "#1861b3" };
+let gui = new GUI();
 
-const cubeFolder = gui.addFolder('Cube')
+const Settings = gui.addFolder('Settings')
 
-var params = {color: "#1861b3" };
 function updateColor(obj) {
     
+    if (!obj) return;
     let colorObj = new THREE.Color( params.color );    
     if (obj)
     {
@@ -162,6 +172,10 @@ function recursiveColor(object, color)
 {
     if (object.name == 'gltf_child')
     {
+        if (!object.original_color)
+        {
+            object.original_color = object.material.color;
+        }            
         object.material.color = color
         //console.log("!")
     }
@@ -171,13 +185,21 @@ function recursiveColor(object, color)
     });    
 }
 
+function recursiveColorRestore(object)
+{
+    if (object.name == 'gltf_child')
+    {
+        console.log("got")
+        object.material.color = object.original_color;
+    }
+
+    object.children.forEach(element => {
+        recursiveColorRestore(element)
+    });
+}
+
 gui.addColor(params,'color').onChange(function(){updateColor(last_object)});
-
-cubeFolder.open()
-
-let editor_state = 'view'
-//possible: view, move, rotate, change color
-
+Settings.open()
 let save = { save:
     function(){ 
     const json = scene.toJSON();
@@ -186,13 +208,27 @@ let save = { save:
 
 };
 
+let load = { load:
+    function(){ 
+        console.log('json')
+    }
+}
 
-// let rotate = { rotate:function(){ console.log("clicked") }};
-// let changeColor = { changeColor:function(){ console.log("clicked") }};
+let reset_color = { reset_color:
+    function(){
+    scene.children.forEach(element => {
+        if (element.name == 'gltf_parent')
+        {
+            recursiveColorRestore(element)
+        }
+    });
+    }
+}
 
 gui.add(save,'save');
-// gui.add(rotate,'rotate');
-// gui.add(changeColor,'changeColor');
+gui.add(load,'load');
+gui.add(reset_color,'reset_color');
+
 
 function raycast_walls()
 {
@@ -290,7 +326,6 @@ var action = 0;
 
 function onClick()
 {        
-
     if (currently_holding )
     {
         if (action == 1 )
