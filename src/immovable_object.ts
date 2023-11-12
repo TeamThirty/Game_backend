@@ -5,9 +5,9 @@ export {immovable_object}
 
 class immovable_object extends sceneObject 
 {
-    constructor(scene : THREE.Scene, mesh : THREE.Mesh)
-    {
-        mesh.layers.set(10);
-        super(scene, mesh);
+    constructor(geometry : THREE.BufferGeometry, material : THREE.Material)
+    {        
+        super(geometry, material);
+        this.layers.set(10);
     }
 }

@@ -8,16 +8,11 @@ import { MySTLLoader } from './stlObject.js';
 
 const scene = new THREE.Scene();
 
-let objList = new Array();
 const loader = new MySTLLoader();
 
 let room = new room_box(scene, 20, 20 ,10);
 
-
 const pointer = new THREE.Vector2();
-
-
-
 
 function onPointerMove( event ) 
 {
@@ -34,19 +29,19 @@ let  cursor = new THREE.Mesh(new THREE.SphereGeometry(0.5, 20, 20), new THREE.Me
 scene.add(cursor)
 camera.layers.enableAll()
 
-loader.load(scene, objList, 
+loader.load(scene,
     './models/fox.stl',
     new THREE.Vector3(0,1,0),
     new THREE.Vector3(-Math.PI/2, 0, 0),
     new THREE.Vector3(0.01, 0.01, 0.01))
 
-loader.load(scene, objList, 
+loader.load(scene,
     './models/Cute_triceratops.stl',
     new THREE.Vector3(5,1,0),
     new THREE.Vector3(-Math.PI/2, 0, 0),
     new THREE.Vector3(0.01, 0.01, 0.01))
     
-loader.load(scene, objList, 
+loader.load(scene,
     './models/chair.stl',
     new THREE.Vector3(2,1,0),
     new THREE.Vector3(-Math.PI/2, 0, 0),
@@ -143,12 +138,6 @@ function raycast_walls()
 function raycast_objects()
 {
     raycaster.setFromCamera( pointer, camera );
-    
-    
-    let objList2 = new Array();
-    objList.forEach(element => {
-        objList2.push(element.mesh)
-    });
     raycaster.layers.set(1)
     const intersects = raycaster.intersectObjects( scene.children, false );    
     
@@ -173,11 +162,16 @@ function raycast_objects()
     }
 }
 
+var next_action = 0;
+
 function onClick()
-{    
+{        
+
     if (currently_holding)
     {
-        currently_holding = null;
+        currently_holding = null;        
+        next_action = (1+next_action)%2;
+        console.log(next_action)
         return;
     }
 
@@ -192,14 +186,40 @@ function onMouseUp()
 {
 
 } 
+let frame = 0;
+
+let arrow;
+
 
 function update()
 {
+     // 1 is move, 2 is rotate
     if (currently_holding)
     {
+        frame+=1
         const grounded_cursor_position = new THREE.Vector3(cursor.position.x, 0, cursor.position.z);
-        currently_holding.position.copy(grounded_cursor_position)
-        //if (currently_holding.)
+        if (next_action == 0)
+        {   
+            scene.remove(arrow)
+            currently_holding.position.copy(grounded_cursor_position)
+            const x = new THREE.Vector3(1,0,0);
+            arrow = new THREE.ArrowHelper(x, currently_holding.position, 5, 0xff0000)
+            scene.add(arrow)
+
+            return
+        }
+        
+        if (next_action == 1)
+        {
+            const x = new THREE.Vector3(0,0,1);
+            
+            let dir = new THREE.Vector3().copy(grounded_cursor_position)
+            dir.sub(currently_holding.position)
+            arrow.setDirection(dir)
+            currently_holding.lookAt(grounded_cursor_position);
+            return
+        }
+        
     }
 }
 
@@ -218,7 +238,7 @@ function animate()
 {   
     requestAnimationFrame(animate)    
     raycast_walls()
-    raycast_objects()
+    if (!currently_holding) raycast_objects()
 
     update()
 
