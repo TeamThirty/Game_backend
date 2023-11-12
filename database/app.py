@@ -1,15 +1,16 @@
 from init import *
 from resourses import UserResource, ProjectResource, LoginResource
+from flask.cli import FlaskGroup
+
+api.add_resource(ProjectResource, '/projects', '/projects/<int:project_id>')
+api.add_resource(UserResource, '/users')
+api.add_resource(LoginResource, '/login')
 
 
 def initialize_db():
     with app.app_context():
         db.create_all()
 
-
-api.add_resource(ProjectResource, '/projects', '/projects/<int:projectId>')
-api.add_resource(UserResource, '/users')
-api.add_resource(LoginResource, '/login')
 
 if __name__ == '__main__':
     initialize_db()
