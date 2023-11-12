@@ -3,23 +3,22 @@ import WebGL from 'three/addons/capabilities/WebGL.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { room_box } from './room'
 
-import { MySTLLoader } from './stlObject.js';
-
+import { stlLoader } from './stlLoader.js';
+import { gltfLoader } from './gltfLoader.js';
 
 const scene = new THREE.Scene();
 
-const loader = new MySTLLoader();
+const stl_loader = new stlLoader();
+const gltf_Loader = new gltfLoader();
 
-let room = new room_box(scene, 20, 20 ,10);
+let room = new room_box(scene, 15, 20 ,10);
 
 const pointer = new THREE.Vector2();
 
 function onPointerMove( event ) 
 {
-
     pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
 }
 
 const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -29,24 +28,43 @@ let  cursor = new THREE.Mesh(new THREE.SphereGeometry(0.5, 20, 20), new THREE.Me
 scene.add(cursor)
 camera.layers.enableAll()
 
-loader.load(scene,
-    './models/fox.stl',
-    new THREE.Vector3(0,1,0),
-    new THREE.Vector3(-Math.PI/2, 0, 0),
-    new THREE.Vector3(0.03, 0.03, 0.03))
+function init()
+{
 
-loader.load(scene,
-    './models/Cute_triceratops.stl',
-    new THREE.Vector3(5,1,0),
-    new THREE.Vector3(-Math.PI/2, 0, 0),
-    new THREE.Vector3(0.01, 0.01, 0.01))
+    gltf_Loader.load(scene,
+        './models/carpet/scene.gltf',
+        new THREE.Vector3(5,1,5),
+        new THREE.Vector3(0, Math.PI, 0),
+        new THREE.Vector3(0.01, 0.01, 0.01));
+
+    gltf_Loader.load(scene,
+        './models/drawer/scene.gltf',
+        new THREE.Vector3(5, 4, 5),
+        new THREE.Vector3(0, Math.PI, 0),
+        new THREE.Vector3(0.01, 0.01, 0.01));
     
-loader.load(scene,
-    './models/chair.stl',
-    new THREE.Vector3(2,1,0),
-    new THREE.Vector3(-Math.PI/2, 0, 0),
-    new THREE.Vector3(0.01, 0.01, 0.01))            
+    stl_loader.load(scene,
+        './models/fox.stl',
+        new THREE.Vector3(0,1,0),
+        new THREE.Vector3(-Math.PI/2, 0, 0),
+        new THREE.Vector3(0.03, 0.03, 0.03));
+    
+    
+    stl_loader.load(scene,
+        './models/Cute_triceratops.stl',
+        new THREE.Vector3(5,1,0),
+        new THREE.Vector3(-Math.PI/2, 0, 0),
+        new THREE.Vector3(0.01, 0.01, 0.01));
+        
+    stl_loader.load(scene,
+        './models/chair.stl',
+        new THREE.Vector3(2,1,0),
+        new THREE.Vector3(-Math.PI/2, 0, 0),
+        new THREE.Vector3(0.01, 0.01, 0.01));
+}
 
+
+init()
 
 
 const renderer = new THREE.WebGLRenderer();
@@ -58,16 +76,16 @@ controls.target.set(0, 0, 0);
 controls.update();
 
 //ambient light
-const light = new THREE.AmbientLight(0x404040); // soft white light
+const light = new THREE.AmbientLight(0x808080); // soft white light
 scene.add(light);
 scene.background = new THREE.Color(0x72645b);
 
 //directional light
 const color = 0xFFFFFF;
-const intensity = 55;
+const intensity = 50;
 const light_point = new THREE.PointLight(color, intensity);
 
-light_point.position.set(5, 5, 5);
+light_point.position.set(10, 2, 10);
 scene.add(light_point);
 camera.layers.enable(10);
 
@@ -89,26 +107,23 @@ function onWindowResize()
 
 }
 
-let mousePos = new THREE.Vector3(0,0,0);
-
-let currently_selected;
 let currently_holding = false;
 
-let raycaster;
-let raycaster2;
+let raycaster_objects;
+let raycaster_walls;
 
 let INTERSECTED;
 let INTERSECTED_WALL;
 
-raycaster = new THREE.Raycaster();
-raycaster2 = new THREE.Raycaster();
+raycaster_objects = new THREE.Raycaster();
+raycaster_walls = new THREE.Raycaster();
 
 function raycast_walls()
 {
-    raycaster2.setFromCamera( pointer, camera );
-    raycaster2.layers.set(10)
+    raycaster_walls.setFromCamera( pointer, camera );
+    raycaster_walls.layers.set(10)
 
-    const intersects = raycaster2.intersectObjects( scene.children, false );
+    const intersects = raycaster_walls.intersectObjects( scene.children, false );
     
 
     if ( intersects.length > 0 ) 
@@ -123,7 +138,7 @@ function raycast_walls()
 
             INTERSECTED_WALL = hit.object;
             INTERSECTED_WALL.currentHex = INTERSECTED_WALL.material.emissive.getHex();
-            INTERSECTED_WALL.material.emissive.setHex( 0xffff00 );
+            INTERSECTED_WALL.material.emissive.setHex( 0x505000 );
         }
 
     }
@@ -137,26 +152,55 @@ function raycast_walls()
 
 function raycast_objects()
 {
-    raycaster.setFromCamera( pointer, camera );
-    raycaster.layers.set(1)
-    const intersects = raycaster.intersectObjects( scene.children, false );    
-    
+    raycaster_objects.setFromCamera( pointer, camera );
+    raycaster_objects.layers.set(1)
+    const intersects = raycaster_objects.intersectObjects( scene.children, true );    
+
     if ( intersects.length > 0 ) 
     {
-        let hit = intersects[ 0 ];    
-        if ( INTERSECTED != hit.object ) {
+        let hit = intersects[ 0 ];
+        let hit_obj = hit.object
+        
+        if ( INTERSECTED != hit_obj ) 
+        {
 
-            if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+            //console.log("HIT!")
+            if (hit_obj.name == "gltf_child")
+            {
+                while (hit_obj.parent && hit_obj.name != 'gltf_parent')
+                {
+                    hit_obj = hit_obj.parent
+                }
+                INTERSECTED = hit_obj
 
-            INTERSECTED = hit.object;
-            INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-            INTERSECTED.material.emissive.setHex( 0xff0000 );
+                // INTERSECTED.children.forEach(element => {
+                //     element.material.emissive.setHex( element.currentHex );                    
+                //     element.currentHex = element.material.emissive.getHex();
+                //     element.material.emissive.setHex( 0xff0000 );                    
+                // });
+            }
+            else
+            {
+                //console.log('obj')
+                if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+                INTERSECTED = hit_obj
+                INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+                INTERSECTED.material.emissive.setHex( 0xff0000 );
+            }
         }
 
     } else {
 
-        if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+        if ( INTERSECTED) 
+        {
+            if (INTERSECTED.name != 'gltf_parent') { INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex )}
+            // else 
+            // {
+            //     INTERSECTED.children.forEach(element => {element.material.emissive.setHex( INTERSECTED.currentHex )});
+            // }
 
+        }
+        
         INTERSECTED = null;
 
     }
@@ -185,15 +229,13 @@ function onClick()
 function onMouseUp()
 {
 
-} 
+}
+
 let frame = 0;
-
-let arrow;
-
 
 function update()
 {
-     // 1 is move, 2 is rotate
+     // 0 is move, 1 is rotate
     if (currently_holding)
     {
         frame+=1
@@ -208,7 +250,6 @@ function update()
         {
             rotateAt(currently_holding, grounded_cursor_position);
         }
-        
     }
 }
 
@@ -217,7 +258,7 @@ function rotateAt(obj, at)
     let dir = new THREE.Vector3().copy(at)
     dir.sub(obj.position)
     const angle = dir.angleTo(new THREE.Vector3(1,0,0)) * (dir.z < 0? 1 : -1);
-    obj.rotation.z = angle+Math.PI/2;
+    obj.rotation.y = angle-Math.PI/2;
     return
 }
 
@@ -243,7 +284,8 @@ function animate()
 
 }
 
-if (WebGL.isWebGLAvailable()) {
+if (WebGL.isWebGLAvailable()) 
+{
     animate()
 }
 else {

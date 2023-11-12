@@ -6,12 +6,14 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 export { gltfLoader }
 
 
-function findType(object, type, list) {
+function findType(object, type, list, depth) {
     object.children.forEach((child) => {
         if (child.type === type) {
-            list.push(child)
+            child.name = 'gltf_child'
+            child.layers.set(1)
+            //list.push(child)            
         }
-        findType(child, type, list);
+        findType(child, type, list, depth+1);
     });
 }
 
@@ -26,28 +28,22 @@ class gltfLoader
 				
         loader.load(path,
             function (gltf) 
-            {                
+            {       
+                let mesh = gltf.scene
+                mesh.name = 'gltf_parent'
                 let list = new Array()
-                findType(gltf.scene, 'Mesh', list)
-                console.log(list)
-                let group = new THREE.Group()
-                list.forEach(element => {
-                    const mesh = new movable_object(element.geometry, element.material)                                    
-                    mesh.name = 'gltf_child'
-                    group.add(mesh)                                        
-                });
-
-                group.position.set(position.x, position.y, position.z)
-                group.rotation.set(rotation.x, rotation.y, rotation.z);
+                findType(gltf.scene, 'Mesh', list, 0)
+                mesh.position.set(position.x, position.y, position.z)
+                mesh.rotation.set(rotation.x, rotation.y, rotation.z);
                 //thosrotation.applyEuler(rotation);
-                group.scale.set(scale.x, scale.y, scale.z);
+                mesh.scale.set(scale.x, scale.y, scale.z);
 
-                group.castShadow = true;
-                group.receiveShadow = true;
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
 
-                group.name = 'gltf_parent'
-                group.layers.set(1)
-                scene.add(group)
+                mesh.name = 'gltf_parent'
+                mesh.layers.set(1)
+                scene.add(mesh)
             });
     }
 }
