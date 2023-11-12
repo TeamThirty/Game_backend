@@ -2,7 +2,7 @@ from init import *
 from resourses import UserResource, ProjectResource, LoginResource
 from flask.cli import FlaskGroup
 
-api.add_resource(ProjectResource, '/projects', '/projects/<int:project_id>')
+api.add_resource(ProjectResource, '/projects', '/projects/<int:projectId>')
 api.add_resource(UserResource, '/users')
 api.add_resource(LoginResource, '/login')
 
