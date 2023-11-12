@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import WebGL from 'three/addons/capabilities/WebGL.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { room_box } from './room'
+import { GUI } from 'dat.gui'
 
 import { stlLoader } from './stlLoader.js';
 import { gltfLoader } from './gltfLoader.js';
@@ -11,7 +12,15 @@ const scene = new THREE.Scene();
 const stl_loader = new stlLoader();
 const gltf_Loader = new gltfLoader();
 
-let room = new room_box(scene, 15, 20 ,10);
+let room_materials = 
+{
+    wall : new THREE.MeshPhongMaterial({color: 0xff00ff}),
+    floor : new THREE.MeshPhongMaterial({color: 0x0000ff}),
+    ceiling : new THREE.MeshPhongMaterial({color: 0xff0000})
+};
+
+let room = new room_box(scene, 15, 20 ,10, 1, room_materials);
+
 
 const pointer = new THREE.Vector2();
 
@@ -42,25 +51,14 @@ function init()
         new THREE.Vector3(5, 4, 5),
         new THREE.Vector3(0, Math.PI, 0),
         new THREE.Vector3(0.01, 0.01, 0.01));
+
+    gltf_Loader.load(scene,
+        './models/bed/scene.gltf',
+        new THREE.Vector3(5, 4, 5),
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Vector3(1.3, 1.3, 1.3));
     
-    stl_loader.load(scene,
-        './models/fox.stl',
-        new THREE.Vector3(0,1,0),
-        new THREE.Vector3(-Math.PI/2, 0, 0),
-        new THREE.Vector3(0.03, 0.03, 0.03));
-    
-    
-    stl_loader.load(scene,
-        './models/Cute_triceratops.stl',
-        new THREE.Vector3(5,1,0),
-        new THREE.Vector3(-Math.PI/2, 0, 0),
-        new THREE.Vector3(0.01, 0.01, 0.01));
-        
-    stl_loader.load(scene,
-        './models/chair.stl',
-        new THREE.Vector3(2,1,0),
-        new THREE.Vector3(-Math.PI/2, 0, 0),
-        new THREE.Vector3(0.01, 0.01, 0.01));
+
 }
 
 
@@ -88,6 +86,7 @@ const light_point = new THREE.PointLight(color, intensity);
 light_point.position.set(10, 2, 10);
 scene.add(light_point);
 camera.layers.enable(10);
+
 
 function resize() {
     const aspectRatio = window.innerWidth / window.innerHeight
@@ -117,6 +116,58 @@ let INTERSECTED_WALL;
 
 raycaster_objects = new THREE.Raycaster();
 raycaster_walls = new THREE.Raycaster();
+
+var params = {color: "#1861b3" };
+var gui = new GUI();
+
+const cubeFolder = gui.addFolder('Cube')
+
+var params = {color: "#1861b3" };
+function updateColor(obj) {
+    
+    let colorObj = new THREE.Color( params.color );    
+    if (obj)
+    {
+        let hex = colorObj.getHexString();
+        recursiveColor(obj, colorObj)         
+    }
+};
+
+function recursiveColor(object, color)
+{
+    if (object.name == 'gltf_child')
+    {
+        object.material.color = color
+        //console.log("!")
+    }
+
+    object.children.forEach(element => {
+        recursiveColor(element, color)
+    });    
+}
+
+gui.addColor(params,'color').onChange(function(){updateColor(last_object)});
+
+cubeFolder.open()
+
+let editor_state = 'view'
+//possible: view, move, rotate, change color
+
+let save = { save:
+    function(){ 
+    const json = scene.toJSON();
+    console.log(json)
+}
+
+};
+
+
+// let rotate = { rotate:function(){ console.log("clicked") }};
+// let changeColor = { changeColor:function(){ console.log("clicked") }};
+
+gui.add(save,'save');
+// gui.add(rotate,'rotate');
+// gui.add(changeColor,'changeColor');
 
 function raycast_walls()
 {
@@ -150,6 +201,8 @@ function raycast_walls()
     }
 }
 
+let last_object = null
+
 function raycast_objects()
 {
     raycaster_objects.setFromCamera( pointer, camera );
@@ -178,6 +231,7 @@ function raycast_objects()
                 //     element.currentHex = element.material.emissive.getHex();
                 //     element.material.emissive.setHex( 0xff0000 );                    
                 // });
+                last_object = INTERSECTED
             }
             else
             {
@@ -186,6 +240,7 @@ function raycast_objects()
                 INTERSECTED = hit_obj
                 INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
                 INTERSECTED.material.emissive.setHex( 0xff0000 );
+                last_object = INTERSECTED
             }
         }
 
@@ -211,10 +266,15 @@ var action = 0;
 function onClick()
 {        
 
-    if (currently_holding)
+    if (currently_holding )
     {
-        currently_holding = null;        
-        action = (1+action)%2;
+        if (action == 1 )
+        {
+            currently_holding = null
+            action = 0
+            return
+        }
+        action +=1
         console.log(action)
         return;
     }
@@ -263,7 +323,6 @@ function rotateAt(obj, at)
 }
 
 window.addEventListener( 'resize', onWindowResize );
-
 document.addEventListener( 'mousemove', onPointerMove );
 document.addEventListener( 'click' , onClick);
 document.addEventListener( 'mouseup', onMouseUp);

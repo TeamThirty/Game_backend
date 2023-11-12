@@ -1,0 +1,11 @@
+Model Information:
+* title:	015 Wardrobe Mod Sonoma Sketchfab 1
+* source:	https://sketchfab.com/3d-models/015-wardrobe-mod-sonoma-sketchfab-1-8a2a7fcc7b5545db871f86fee5747d50
+* author:	vestram (https://sketchfab.com/vestram)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "015 Wardrobe Mod Sonoma Sketchfab 1" (https://sketchfab.com/3d-models/015-wardrobe-mod-sonoma-sketchfab-1-8a2a7fcc7b5545db871f86fee5747d50) by vestram (https://sketchfab.com/vestram) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
