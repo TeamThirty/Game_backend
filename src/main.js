@@ -91,9 +91,17 @@ function init() {
   gltf_Loader.load(
     scene,
     "./models/cat_lamp/scene.gltf",
-    new THREE.Vector3(13.582252293830802, 4.5, 18.637717288718285),
+    new THREE.Vector3(13.582252293830802, 4.35, 18.637717288718285),
     new THREE.Vector3(0, -2.2835622335795933, 0),
     new THREE.Vector3(0.5, 0.5, 0.5)
+  );
+
+  gltf_Loader.load(
+    scene,
+    "./models/octopus_flower/scene.gltf",
+    new THREE.Vector3(9.582252293830802, 4.1, 18.637717288718285),
+    new THREE.Vector3(0, -2.2835622335795933, 0),
+    new THREE.Vector3(0.2, 0.2, 0.2)
   );
 
   gltf_Loader.load(
