@@ -37,6 +37,9 @@ let  cursor = new THREE.Mesh(new THREE.SphereGeometry(0.5, 20, 20), new THREE.Me
 scene.add(cursor)
 camera.layers.enableAll()
 
+//THREE.TextureLoader()
+
+
 function init()
 {
 
@@ -56,9 +59,7 @@ function init()
         './models/bed/scene.gltf',
         new THREE.Vector3(5, 4, 5),
         new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(1.3, 1.3, 1.3));
-    
-
+        new THREE.Vector3(1.3, 1.3, 1.3));  
 }
 
 
@@ -270,19 +271,22 @@ function onClick()
     {
         if (action == 1 )
         {
+            console.log("object placed")
+            console.log(currently_holding.position)
+            console.log(currently_holding.rotation)
             currently_holding = null
             action = 0
             return
         }
         action +=1
-        console.log(action)
+        //console.log(action)
         return;
     }
 
     if (INTERSECTED)
     {
         currently_holding = INTERSECTED;
-        console.log(currently_holding)
+        //console.log(currently_holding.position)
     }
 }
 

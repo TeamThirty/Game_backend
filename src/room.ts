@@ -35,7 +35,7 @@ class room_box extends room
         current_wall.position.set(-t/2, h/2, d/2);
         current_wall.rotation.set(0, -Math.PI / 2, 0);
         current_wall.visible = false;       
-        current_wall.layers.set(walls_layer);
+        current_wall.layers.set(0);
 
         //left wall
         current_wall = new wall(depth, height, wall_thickness, materials['wall']);
@@ -49,6 +49,7 @@ class room_box extends room
         current_wall.position.set(w/2, h/2, -t/2);
         current_wall.rotation.set(0, 0, 0); 
         current_wall.visible = false;       
+        current_wall.layers.set(0);
         
         //far wall        
         current_wall = new wall(width + 2 * wall_thickness, height, wall_thickness, materials['wall']);
@@ -59,10 +60,10 @@ class room_box extends room
         
         this.ceiling = new ceiling(width+2*wall_thickness, depth+2*wall_thickness, wall_thickness, materials['ceiling']);
         scene.add(this.ceiling)
-        this.ceiling.position.set(w/2, h+t/2, d/2);
-        this.ceiling.visible = false;
-        this.ceiling.layers.set(walls_layer);
-        
+        this.ceiling.position.set(w/2, h+t/2, d/2);        
+        this.ceiling.visible = false;     
+        this.ceiling.layers.set(0);
+
         this.floor = new floor(width+2*wall_thickness, depth+2*wall_thickness, wall_thickness, materials['floor']);
         scene.add(this.floor)
         this.floor.position.set(w/2, -t/2, d/2);        
