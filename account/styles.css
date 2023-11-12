@@ -1,0 +1,71 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #c2e1e1;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 10 auto;
+    padding: 20px;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    font-size: 16px;
+    color: #fff;
+    background-color: #3498db;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: #2980b9;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    margin: 10px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    margin: 10px;
+    border: 1px solid #3ce7ea;
+    border-radius: 5px;
+}
+
+.project {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #71c598;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#prjForm {
+    margin: 20px;
+}
+
+#projectsList {
+    width: 600px;
+    height: 200px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 50px;
+    background-color: #ffffff;
+}

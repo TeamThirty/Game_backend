@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Account</title>
+</head>
+
+<body>
+    <h1>Account</h1>
+
+
+
+    <form id="loginForm">
+        <label for="login">Login:</label>
+        <input type="text" id="login" name="login" required>
+
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="button" onclick="performLogin()">Login</button>
+
+    </form>
+
+    <form id="prjForm"></form>
+    <div id="projectsList">
+    </div>
+    <button type="button" onclick="create_project()">Создать проект</button>
+    </form>
+    <form id="createForm">
+
+        <button type="button" onclick="toggleCreateUserForm()">Create User</button>
+        <form id="createUserForm">
+            <label for="newLogin">New Login:</label>
+            <input type="text" id="newLogin" name="newLogin" required>
+
+            <label for="newPassword">New Password:</label>
+            <input type="password" id="newPassword" name="newPassword" required>
+
+            <button type="button" onclick="createUser()">Confirm</button>
+        </form>
+
+
+
+        <script>
+            const parentUrl = 'https://web-nshugalevkaia.cloud.okteto.net'
+            const child_room_page = 'example.com'
+
+            function displayProjects(projects) {
+                const projectsList = document.getElementById('projectsList');
+                const access_token = localStorage.getItem('access_token')
+                // Очищаем предыдущий список проектов (если есть)
+                projectsList.innerHTML = '';
+
+                // Создаем элементы списка проектов и добавляем их в DOM
+                projects.forEach(project => {
+                    const projectItem = document.createElement('div');
+                    projectItem.textContent = project.name;
+
+                    // Добавьте обработчик события для обработки клика на проекте
+                    projectItem.addEventListener('click', async () => {
+                        // Здесь ваш код для отправки запроса на получение дополнительной информации о проекте
+                        fetch(`${parentUrl}/${project.id}`, {
+                            headers: {
+                                'Authorization': `Bearer ${access_token}`,
+                            },
+                        }).then(projectDetailsResponse => { return projectDetailsResponse.json() }).then(res => { localStorage.setItem('project_scene_data', scene_data); }
+                        );
+                    });
+
+                    projectsList.appendChild(projectItem);
+                });
+            }
+
+            function performLogin() {
+                var login = document.getElementById("login").value;
+                var password = document.getElementById("password").value;
+
+                // Отправляем запрос к API
+                fetch(`${parentUrl}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        login: login,
+                        password: password
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data.access_token) {
+                            localStorage.setItem('access_token', data.access_token);
+                            console.log('log in!')
+
+                            fetch(`${parentUrl}/projects`, {
+                                headers: {
+                                    'Authorization': `Bearer ${data.access_token}`,
+                                },
+                            }).then(resp => {
+                                resp.json().then(projects_data =>
+                                    displayProjects(projects_data));
+                            })
+                        } else {
+                            alert('Invalid credentials');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+
+            function create_project() {
+                localStorage.setItem('project_scene_data', null)
+                window.location.href = `${child_room_page}`
+            }
+
+            function toggleCreateUserForm() {
+                var form = document.getElementById("createUserForm");
+                form.style.display = form.style.display === "none" ? "block" : "none";
+            }
+
+            function createUser() {
+                var newLogin = document.getElementById("newLogin").value;
+                var newPassword = document.getElementById("newPassword").value;
+
+                fetch(`${parentUrl}/users`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        login: newLogin,
+                        password: newPassword
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Обрабатываем ответ от сервера
+                        console.log(data);
+
+                        // Дополнительная логика, например, обновление интерфейса
+                        if (data.id) {
+                            alert('User created successfully');
+                            // Очищаем поля ввода
+                            document.getElementById("newLogin").value = '';
+                            document.getElementById("newPassword").value = '';
+                        } else {
+                            alert('Failed to create user');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }
+
+        </script>
+</body>
+
+</html>
