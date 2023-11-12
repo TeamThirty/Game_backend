@@ -1,0 +1,11 @@
+Model Information:
+* title:	Chair_Soborg
+* source:	https://sketchfab.com/3d-models/chair-soborg-fcf8431ac4e541bfb829a6bafe17b8a0
+* author:	gettymars (https://sketchfab.com/gettymars)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Chair_Soborg" (https://sketchfab.com/3d-models/chair-soborg-fcf8431ac4e541bfb829a6bafe17b8a0) by gettymars (https://sketchfab.com/gettymars) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

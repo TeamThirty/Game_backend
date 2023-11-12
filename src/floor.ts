@@ -4,11 +4,15 @@ export {floor}
 
 class floor extends immovable_object
 {
-    constructor(scene : THREE.Scene, width : number, depth : number, thickness : number)
+    constructor(width : number, depth : number, thickness : number, material : THREE.Material)
     {
-        const geometry = new THREE.BoxGeometry( width, thickness, depth ); 
-        const material = new THREE.MeshPhongMaterial( {color: 0x00ff00} ); 
-        const box = new THREE.Mesh( geometry, material ); 
-        super(scene, box);
+        const geometry = new THREE.BoxGeometry( width, thickness, depth );         
+        if (material==null)
+        {
+            material = new THREE.MeshPhongMaterial( {color: 0x00ff00 } );         
+        }        
+        super(geometry, material);
+        this.castShadow = false;
+        this.receiveShadow = true;
     }
 }

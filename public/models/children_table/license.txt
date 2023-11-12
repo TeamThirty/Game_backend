@@ -1,0 +1,11 @@
+Model Information:
+* title:	Children Table 01
+* source:	https://sketchfab.com/3d-models/children-table-01-5c2496c27fdb42d09cd2d4939cf12b03
+* author:	JungleBird (https://sketchfab.com/junglebird)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Children Table 01" (https://sketchfab.com/3d-models/children-table-01-5c2496c27fdb42d09cd2d4939cf12b03) by JungleBird (https://sketchfab.com/junglebird) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
