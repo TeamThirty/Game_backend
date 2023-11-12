@@ -43,23 +43,31 @@ camera.layers.enableAll()
 function init()
 {
 
-    gltf_Loader.load(scene,
-        './models/carpet/scene.gltf',
-        new THREE.Vector3(5,1,5),
-        new THREE.Vector3(0, Math.PI, 0),
-        new THREE.Vector3(0.01, 0.01, 0.01));
+    gltf_Loader.load(
+      scene,
+      "./models/carpet/scene.gltf",
+      new THREE.Vector3(5, 1, 5),
+      new THREE.Vector3(0, Math.PI, 0),
+      new THREE.Vector3(0.05, 0.05, 0.05)
+    );
 
-    gltf_Loader.load(scene,
-        './models/drawer/scene.gltf',
-        new THREE.Vector3(5, 4, 5),
-        new THREE.Vector3(0, Math.PI, 0),
-        new THREE.Vector3(0.01, 0.01, 0.01));
+    gltf_Loader.load(
+      scene,
+      "./models/drawer/scene.gltf",
+      new THREE.Vector3(5, 4, 5),
+      new THREE.Vector3(0, Math.PI, 0),
+      new THREE.Vector3(0.03, 0.03, 0.03)
+    );
 
-    gltf_Loader.load(scene,
-        './models/bed/scene.gltf',
-        new THREE.Vector3(5, 4, 5),
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Vector3(1.3, 1.3, 1.3));  
+    gltf_Loader.load(
+      scene,
+      "./models/bed/scene.gltf",
+      new THREE.Vector3(5, 4, 5),
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(6, 6, 6)
+    );
+    
+
 }
 
 
