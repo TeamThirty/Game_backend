@@ -46,68 +46,81 @@ function onPointerMove( event )
 }
 
 const camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(10, 10, 10);
+camera.position.set(-5, 5, 0);
 
-let  cursor = new THREE.Mesh(new THREE.SphereGeometry(0.5, 20, 20), new THREE.MeshBasicMaterial( {color : 0xffffff}))
-scene.add(cursor)
-camera.layers.enableAll()
+let cursor = new THREE.Mesh(
+  new THREE.SphereGeometry(0.5, 20, 20),
+  new THREE.MeshBasicMaterial({ color: 0xffffff })
+);
+scene.add(cursor);
+camera.layers.enableAll();
 
-function init()
-{
+function init() {
+  gltf_Loader.load(
+    scene,
+    "./models/carpet/scene.gltf",
+    new THREE.Vector3(10.989529887492452, 0, 11.879515420711753),
+    new THREE.Vector3(0, 1.5673257389576047, 0),
+    new THREE.Vector3(0.07, 0.05, 0.05)
+  );
 
-    gltf_Loader.load(
-      scene,
-      "./models/carpet/scene.gltf",
-      new THREE.Vector3(10.989529887492452, 0, 11.879515420711753),
-      new THREE.Vector3(0, 1.5673257389576047, 0),
-      new THREE.Vector3(0.07, 0.05, 0.05)
-    );
+  gltf_Loader.load(
+    scene,
+    "./models/drawer/scene.gltf",
+    new THREE.Vector3(2.5221020966278473, 0, 18.53247520403532),
+    new THREE.Vector3(0, Math.PI, 0),
+    new THREE.Vector3(0.07, 0.08, 0.05)
+  );
 
-    gltf_Loader.load(
-      scene,
-      "./models/drawer/scene.gltf",
-      new THREE.Vector3(2.5221020966278473, 0, 18.53247520403532),
-      new THREE.Vector3(0, Math.PI, 0),
-      new THREE.Vector3(0.07, 0.08, 0.05)
-    );
+  gltf_Loader.load(
+    scene,
+    "./models/bed/scene.gltf",
+    new THREE.Vector3(9.936026928120732, 0, 1.7853299259760291),
+    new THREE.Vector3(0, -1.5608593221139344, 0),
+    new THREE.Vector3(7, 7, 7)
+  );
 
-    gltf_Loader.load(
-      scene,
-      "./models/bed/scene.gltf",
-      new THREE.Vector3(9.936026928120732, 0, 1.7853299259760291),
-      new THREE.Vector3(0, -1.5608593221139344, 0),
-      new THREE.Vector3(7, 7, 7)
-    );
+  gltf_Loader.load(
+    scene,
+    "./models/children_table/scene.gltf",
+    new THREE.Vector3(10.844613799065431, 2.5, 17.953295124122405),
+    new THREE.Vector3(0, 1.5548314755068127, 0),
+    new THREE.Vector3(0.07, 0.08, 0.09)
+  );
 
-    gltf_Loader.load(
-      scene,
-      "./models/children_table/scene.gltf",
-      new THREE.Vector3(10.844613799065431, 2.5, 17.953295124122405),
-      new THREE.Vector3(0, 1.5548314755068127, 0),
-      new THREE.Vector3(0.07, 0.08, 0.09)
-    );
+  gltf_Loader.load(
+    scene,
+    "./models/cat_lamp/scene.gltf",
+    new THREE.Vector3(13.582252293830802, 4.5, 18.637717288718285),
+    new THREE.Vector3(0, -2.2835622335795933, 0),
+    new THREE.Vector3(0.5, 0.5, 0.5)
+  );
 
-    gltf_Loader.load(
-      scene,
-      "./models/chair/scene.gltf",
-      new THREE.Vector3(10.999751491683217, 0, 15.37089923342825),
-      new THREE.Vector3(0, 0.09074563040639427, 0),
-      new THREE.Vector3(5, 6, 5)
-    );
-    
+  gltf_Loader.load(
+    scene,
+    "./models/chair/scene.gltf",
+    new THREE.Vector3(10.999751491683217, 0, 15.37089923342825),
+    new THREE.Vector3(0, 0.09074563040639427, 0),
+    new THREE.Vector3(5, 6, 5)
+  );
 
+  gltf_Loader.load(
+    scene,
+    "./models/bookshelf/scene.gltf",
+    new THREE.Vector3(14.24534224792934, 0, 6.131222916969103),
+    new THREE.Vector3(0, -1.58574299469544, 0),
+    new THREE.Vector3(0.85, 0.85, 0.85)
+  );
 }
 
-
-init()
-
+init();
 
 const renderer = new THREE.WebGLRenderer();
 const canvas = renderer.domElement;
 document.body.appendChild(canvas);
 renderer.setSize(window.innerWidth, window.innerHeight);
 const controls = new OrbitControls(camera, canvas);
-controls.target.set(0, 0, 0);
+controls.target.set(30, 0, 30);
 controls.update();
 
 //ambient light
