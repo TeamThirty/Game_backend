@@ -46,25 +46,41 @@ function init()
     gltf_Loader.load(
       scene,
       "./models/carpet/scene.gltf",
-      new THREE.Vector3(5, 1, 5),
-      new THREE.Vector3(0, Math.PI, 0),
-      new THREE.Vector3(0.05, 0.05, 0.05)
+      new THREE.Vector3(10.989529887492452, 0, 11.879515420711753),
+      new THREE.Vector3(0, 1.5673257389576047, 0),
+      new THREE.Vector3(0.07, 0.05, 0.05)
     );
 
     gltf_Loader.load(
       scene,
       "./models/drawer/scene.gltf",
-      new THREE.Vector3(5, 4, 5),
+      new THREE.Vector3(2.5221020966278473, 0, 18.53247520403532),
       new THREE.Vector3(0, Math.PI, 0),
-      new THREE.Vector3(0.03, 0.03, 0.03)
+      new THREE.Vector3(0.07, 0.08, 0.05)
     );
 
     gltf_Loader.load(
       scene,
       "./models/bed/scene.gltf",
-      new THREE.Vector3(5, 4, 5),
-      new THREE.Vector3(0, 0, 0),
-      new THREE.Vector3(6, 6, 6)
+      new THREE.Vector3(9.936026928120732, 0, 1.7853299259760291),
+      new THREE.Vector3(0, -1.5608593221139344, 0),
+      new THREE.Vector3(7, 7, 7)
+    );
+
+    gltf_Loader.load(
+      scene,
+      "./models/children_table/scene.gltf",
+      new THREE.Vector3(10.844613799065431, 2.5, 17.953295124122405),
+      new THREE.Vector3(0, 1.5548314755068127, 0),
+      new THREE.Vector3(0.07, 0.08, 0.09)
+    );
+
+    gltf_Loader.load(
+      scene,
+      "./models/chair/scene.gltf",
+      new THREE.Vector3(10.999751491683217, 0, 15.37089923342825),
+      new THREE.Vector3(0, 0.09074563040639427, 0),
+      new THREE.Vector3(5, 6, 5)
     );
     
 
