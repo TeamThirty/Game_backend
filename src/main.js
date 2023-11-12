@@ -270,15 +270,15 @@ function raycast_walls()
             if ( INTERSECTED_WALL ) INTERSECTED_WALL.material.emissive.setHex( INTERSECTED_WALL.currentHex );
 
             INTERSECTED_WALL = hit.object;
-            INTERSECTED_WALL.currentHex = INTERSECTED_WALL.material.emissive.getHex();
-            INTERSECTED_WALL.material.emissive.setHex( 0x505000 );
+            // INTERSECTED_WALL.currentHex = INTERSECTED_WALL.material.emissive.getHex();
+            // INTERSECTED_WALL.material.emissive.setHex( 0x505000 );
         }
 
     }
     else 
     {
         //we were hitting it before but now object hit changed, need to get back our original color
-        if ( INTERSECTED_WALL ) INTERSECTED_WALL.material.emissive.setHex( INTERSECTED_WALL.currentHex );
+        //if ( INTERSECTED_WALL ) INTERSECTED_WALL.material.emissive.setHex( INTERSECTED_WALL.currentHex );
         INTERSECTED_WALL = null;
     }
 }
@@ -298,22 +298,13 @@ function raycast_objects()
         
         if ( INTERSECTED != hit_obj ) 
         {
-
-            //console.log("HIT!")
             if (hit_obj.name == "gltf_child")
             {
                 while (hit_obj.parent && hit_obj.name != 'gltf_parent')
                 {
                     hit_obj = hit_obj.parent
-                }
-                INTERSECTED = hit_obj
-
-                // INTERSECTED.children.forEach(element => {
-                //     element.material.emissive.setHex( element.currentHex );                    
-                //     element.currentHex = element.material.emissive.getHex();
-                //     element.material.emissive.setHex( 0xff0000 );                    
-                // });
-                last_object = INTERSECTED
+                }                        
+                INTERSECTED = hit_obj                
             }
             else
             {
@@ -322,7 +313,6 @@ function raycast_objects()
                 INTERSECTED = hit_obj
                 INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
                 INTERSECTED.material.emissive.setHex( 0xff0000 );
-                last_object = INTERSECTED
             }
         }
 
@@ -354,6 +344,7 @@ function onClick()
             console.log("object placed")
             console.log(currently_holding.position)
             console.log(currently_holding.rotation)
+            last_object = currently_holding
             currently_holding = null
             action = 0
             return
