@@ -7,6 +7,7 @@ class immovable_object extends sceneObject
 {
     constructor(scene : THREE.Scene, mesh : THREE.Mesh)
     {
+        mesh.layers.set(10);
         super(scene, mesh);
     }
 }

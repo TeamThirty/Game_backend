@@ -62,7 +62,7 @@ class room_box extends room
         
         this.floor = new floor(scene, width+2*wall_thickness, depth+2*wall_thickness, wall_thickness);
         this.floor.mesh.position.set(w/2, -t/2, d/2);        
-        this.floor.mesh.layers.set(walls_layer);
+        this.floor.mesh.layers.set(walls_layer);        
     }
 }
 

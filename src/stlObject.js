@@ -28,8 +28,10 @@ class MySTLLoader
                 mesh.castShadow = true;
                 mesh.receiveShadow = true;
 
-                scene.add(mesh);
-                objList.push(mesh)
+                //scene.add(mesh);
+                objList.push( new movable_object(scene, mesh))
+                //scene.add(new movable_object(scene, mesh))
+                scene.add(mesh)
             });
     }
 }
