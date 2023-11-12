@@ -33,7 +33,7 @@ loader.load(scene,
     './models/fox.stl',
     new THREE.Vector3(0,1,0),
     new THREE.Vector3(-Math.PI/2, 0, 0),
-    new THREE.Vector3(0.01, 0.01, 0.01))
+    new THREE.Vector3(0.03, 0.03, 0.03))
 
 loader.load(scene,
     './models/Cute_triceratops.stl',
@@ -162,7 +162,7 @@ function raycast_objects()
     }
 }
 
-var next_action = 0;
+var action = 0;
 
 function onClick()
 {        
@@ -170,8 +170,8 @@ function onClick()
     if (currently_holding)
     {
         currently_holding = null;        
-        next_action = (1+next_action)%2;
-        console.log(next_action)
+        action = (1+action)%2;
+        console.log(action)
         return;
     }
 
@@ -198,29 +198,27 @@ function update()
     {
         frame+=1
         const grounded_cursor_position = new THREE.Vector3(cursor.position.x, 0, cursor.position.z);
-        if (next_action == 0)
+        
+        if (action == 0)
         {   
-            scene.remove(arrow)
             currently_holding.position.copy(grounded_cursor_position)
-            const x = new THREE.Vector3(1,0,0);
-            arrow = new THREE.ArrowHelper(x, currently_holding.position, 5, 0xff0000)
-            scene.add(arrow)
-
-            return
         }
         
-        if (next_action == 1)
+        if (action == 1)
         {
-            const x = new THREE.Vector3(0,0,1);
-            
-            let dir = new THREE.Vector3().copy(grounded_cursor_position)
-            dir.sub(currently_holding.position)
-            arrow.setDirection(dir)
-            currently_holding.lookAt(grounded_cursor_position);
-            return
+            rotateAt(currently_holding, grounded_cursor_position);
         }
         
     }
+}
+
+function rotateAt(obj, at)
+{
+    let dir = new THREE.Vector3().copy(at)
+    dir.sub(obj.position)
+    const angle = dir.angleTo(new THREE.Vector3(1,0,0)) * (dir.z < 0? 1 : -1);
+    obj.rotation.z = angle+Math.PI/2;
+    return
 }
 
 window.addEventListener( 'resize', onWindowResize );
@@ -241,7 +239,6 @@ function animate()
     if (!currently_holding) raycast_objects()
 
     update()
-
     render()
 
 }
